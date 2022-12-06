@@ -13,7 +13,7 @@ window.addEventListener('load', function () {
     let inputToPlace = document.getElementById('toPlaces');
 
     const options = {
-        componentRestrictions: { country: "pk" },
+        componentRestrictions: { country: "usa" },
         fields: ["address_components", "geometry"],
         types: ["address"],
     }
@@ -60,6 +60,7 @@ window.addEventListener('load', function () {
                 resultField.innerHTML = "";
                 resultFieldDistance.innerHTML = result.routes[0].legs[0].distance.text + " (" + result.routes[0].legs[0].distance.value + " meters)";
                 resultFieldDuration.innerHTML = result.routes[0].legs[0].duration.text + " (" + result.routes[0].legs[0].duration.value + " seconds)";
+                document.getElementById("nameofid").value = (result.routes[0].legs[0].distance.text);
 
                 directionsRenderer.setDirections(result);
             } else  {
