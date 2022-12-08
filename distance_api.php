@@ -1,5 +1,5 @@
  <?php
-
+// database connection
 $servername='localhost';
 $username='root';
 $password='';
@@ -8,11 +8,11 @@ $conn=mysqli_connect($servername,$username,$password,"$dbname");
 if(!$conn){
    die('Could not Connect My Sql:' .mysql_error());
 }
-
-if(isset($_POST['save']))
+// data insert in database and send data gmail
+if(!empty($_POST))
 {	 
-    
-    
+    $output = '';
+    $message = '';
     $nameofid = $_POST['nameofid']; 
     $f_name = $_POST['f_name'];
     $email_add = $_POST['email_add'];
@@ -30,16 +30,15 @@ if(isset($_POST['save']))
     $rec_con_numb = $_POST['rec_con_numb'];
 	 $sql = "INSERT INTO map_data (miles,f_name,email_add,p_no,coun,pick_add,pick_add_line,pick_city,pick_zip,drop_add_line,drop_city,drop_zip,rec_name,rec_email,rec_con_numb) VALUES ('$nameofid','$f_name','$email_add','$p_no','$coun','$pick_add','$pick_add_line','$pick_city','$pick_zip','$drop_add_line','$drop_city','$drop_zip','$rec_name','$rec_email','$rec_con_numb')";
 	 if (mysqli_query($conn, $sql)) {
-		echo "New record created successfully !";
+        echo "New record created successfully !";
+                // $output .= $message;
 	 } else {
-		echo "Error: " . $sql . "
-" . mysqli_error($conn);
-	 }
-	 mysqli_close($conn);
+        $output .= 'Error' . $query;
+	 } 
   
-// ================mail=================
+// ================mailer=================
  
-    $html = "<table class='table table-bordered'><thead> <tr><th scope='col'>Miles</th><th scope='col'>Full Name</th><th scope='col'>Email Address</th><th scope='col'>Phone Number</th><th scope='col'>Country</th><th scope='col'>Enter Pickup / Return Address</th><th scope='col'>Address Line</th><th scope='col'>City</th><th scope='col'>ZIP</th><th scope='col'>Address Line</th><th scope='col'>City</th><th scope='col'>ZIP</th><th scope='col'>Receiver Name</th><th scope='col'>Receiver Email</th><th scope='col'>Receiver Contact Number</th></tr></thead><tbody><tr><th scope='row'>$nameofid</th><th scope='row'>$f_name</th><th scope='row'>$email_add</th><th scope='row'>$p_no</th><th scope='row'>$coun</th><th scope='row'>$pick_add</th><th scope='row'>$pick_add_line</th><th scope='row'>$pick_city</th><th scope='row'>$pick_zip</th><th scope='row'>$drop_add_line</th><th scope='row'>$drop_city</th><th scope='row'>$drop_zip</th><th scope='row'>$rec_name</th><th scope='row'>$rec_email</th><th scope='row'>$rec_con_numb</th></tr></tbody></table>";
+    $html = "<table> <tr>    <th scope='col'>Miles</th>    <td scope='row'>$nameofid</td></tr><tr>    <th scope='col'>Full Name</th>    <td scope='row'>$f_name</td></tr><tr>    <th scope='col'>Email Address</th>    <td scope='row'>$email_add</td></tr><tr>    <th scope='col'>Phone Number</th>    <td scope='row'>$p_no</td></tr><tr>    <th scope='col'>Country</th>    <td scope='row'>$coun</td></tr><tr>    <th scope='col'>Enter Pickup/Return Add</th>    <td scope='row'>$pick_add</td></tr><tr>    <th scope='col'>Address Line</th>    <td scope='row'>$pick_add_line</td></tr><tr>    <th scope='col'>City</th>    <td scope='row'>$pick_city</td></tr><tr>    <th scope='col'>ZIP</th>    <td scope='row'>$pick_zip</td></tr><tr>    <th scope='col'>Address Line</th>    <td scope='row'>$drop_add_line</td></tr><tr>    <th scope='col'>City</th>    <td scope='row'>$drop_city</td></tr><tr>    <th scope='col'>ZIP</th>    <td scope='row'>$drop_zip</td></tr><tr>    <th scope='col'>Receiver Name</th>    <td scope='row'>$rec_name</td></tr><tr>    <th scope='col'>Receiver Email</th>    <td scope='row'>$rec_email</td></tr><tr>    <th scope='col'>Receiver Contact Number</th>    <td scope='row'>$rec_con_numb</td></tr></table>";
     require('smtp/PHPMailerAutoload.php');
     $mail = new PHPMailer();
     $mail->SMTPDebug = 3;
@@ -53,8 +52,9 @@ if(isset($_POST['save']))
     $mail->Username = "asifaslamaimviz@gmail.com";
     $mail->Password = 'jdmwncwtnwsaaljv';
     $mail->SetFrom("asifaslamaimviz@gmail.com");
-    //   $mail->Subject = $subject;
-    $mail->addAddress('woodjacob033@gmail.com');
+    $mail->Subject = 'Step Form Data';
+    $mail->addAddress('asifaslamaimviz@gmail.com');
+    // $mail->addAddress('woodjacob033@gmail.com');
     $mail->isHTML(true);
     $mail->subject = "NEW contact us";
     $mail->Body = $html;
